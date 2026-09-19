@@ -4,7 +4,7 @@
   <img src="assets/IMG_7776.jpeg" alt="Paradox Recon" width="320"/>
 </p>
 
-**NETWORK • WEB • SYSTEM • SECURITY**
+**NETWORK • WEB • SYSTEM • SECURITY** — v1.2.0
 
 A modular reconnaissance & diagnostic toolkit for **Termux** and **Linux**.
 
@@ -19,88 +19,40 @@ A modular reconnaissance & diagnostic toolkit for **Termux** and **Linux**.
 ## Features
 
 ### Network
-- Local IP / interfaces
-- Public IP
-- LAN host discovery (ARP + limited ping)
-- DNS lookup / reverse DNS
-- ASN / organization lookup
-- WHOIS lookup
-- Route tracing
-- Gateway detection
-- Wi-Fi / network information
+- Local IP / interfaces, public IP + GeoIP
+- LAN host discovery (ARP + ping)
+- DNS lookup / reverse DNS (A, AAAA, MX, NS, TXT, CNAME, SOA)
+- ASN / organization / WHOIS
+- Route tracing, gateway detection, Wi-Fi info
 
 ### Web Diagnostics
-- HTTP/HTTPS status & response headers
-- Redirect chain analysis
-- TLS / certificate information (expiry, SANs, issuer)
+- HTTP/HTTPS status, headers, redirect chains
+- TLS certificate (expiry, SANs, issuer, cipher)
 - Response-time measurement
 - robots.txt / sitemap detection
-- Server / technology hints
+- Technology fingerprinting (WordPress, React, nginx, Cloudflare, …)
 
-### Security Checks
-- Security header audit (CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, …)
-- TLS certificate expiry
-- Common path / sensitive file checks (authorized testing only)
-- Common service port discovery
-- Basic subdomain enumeration (authorized domains only)
-- Local network exposure summary
+### Security
+- Security header audit (CSP, HSTS, XFO, XCTO, Referrer-Policy, …)
+- Port scan + **banner grabbing**
+- Common path / sensitive file checks (authorized only)
+- Subdomain enumeration (authorized only)
+- **Email auth**: SPF / DMARC / DKIM selectors
+- **CORS** misconfiguration check
+- **Cookie** flags (HttpOnly, Secure, SameSite)
+- **WAF / CDN** detection
+- Cloud metadata endpoint probe (IMDSv1 exposure)
 
-### Diagnostics
-- Internet / DNS / gateway / HTTPS connectivity
-- Latency & basic packet-loss indication
-- IPv4 / IPv6 connectivity
-- Automatic full diagnostic report
+### Tools
+- Encoder/decoder (Base64, URL, Hex, MD5, SHA1/256/512)
+- Hash type identifier
+- Full auto diagnostic + JSON/TXT reports
 
-### Termux / Device
-- CPU architecture, RAM, storage
-- Battery status (Termux API or sysfs)
-- Android / Termux version
-- Kernel, hostname, environment
-- Running processes
-- Network interfaces
+### System (Termux / Linux)
+- CPU, RAM, disk, battery, Android/Termux version
+- Kernel, processes, interfaces
 
-### Reporting
-- JSON + human-readable TXT reports
-- Timestamped files in `./reports/`
-- Scan history (`reports/scan_history.json`)
-- Auto-save after most actions
-
-## Requirements
-
-- Python 3.8+
-- Recommended packages (optional but improve results):
-  - `curl`, `dig` / `host`, `whois`, `traceroute` / `tracepath`, `iproute2`, `ping`
-- Python: `requests` (strongly recommended)
-
-### Termux quick setup
-
-```bash
-pkg update && pkg install python curl dnsutils whois traceroute iproute2
-pip install requests
-```
-
-### Linux (Debian/Ubuntu)
-
-```bash
-sudo apt update
-sudo apt install python3 python3-requests curl dnsutils whois traceroute iproute2
-```
-
-## Usage
-
-```bash
-# Interactive menu (default)
-python3 paradox_recon.py
-
-# One-shot full diagnostic
-python3 paradox_recon.py --full
-
-# Quick helpers
-python3 paradox_recon.py --public-ip
-python3 paradox_recon.py --device
-```
-
-## Menu Map
+## Menu
 
 ```
  NETWORK
@@ -118,40 +70,58 @@ python3 paradox_recon.py --device
  └─ 10  Redirect Analyzer
 
  SECURITY
- ├─ 11  Port Exposure Check
+ ├─ 11  Port + Banner Grab
  ├─ 12  Domain Surface Check
- └─ 13  Local Network Audit
+ ├─ 13  Local Network Audit
+ ├─ 14  Email Auth (SPF/DMARC)
+ ├─ 15  CORS / Cookie Audit
+ └─ 16  WAF / Tech Fingerprint
 
  SYSTEM
- ├─ 14  Device Information
- ├─ 15  Network Interfaces
- └─ 16  Resource Monitor
+ ├─ 17  Device Information
+ ├─ 18  Network Interfaces
+ └─ 19  Resource Monitor
 
  TOOLS
- ├─ 17  Full Diagnostic
- ├─ 18  Generate Report
- └─ 19  Scan History
+ ├─ 20  Full Diagnostic
+ ├─ 21  Encoder / Decoder
+ ├─ 22  Hash Identifier
+ ├─ 23  Cloud Metadata Check
+ ├─ 24  Generate Report
+ └─ 25  Scan History
 
- 20  Exit
+ 26  Exit
 ```
 
-## Important – Authorized Use Only
+## Install
 
-- Port scanning, subdomain enumeration, and path checks must only be performed on systems **you own** or have **explicit written permission** to test.
-- The tool includes confirmation prompts for surface checks.
-- Never use against third-party infrastructure without authorization.
-
-## Reports
-
-All scans that return data are automatically saved under:
-
+**Termux**
+```bash
+pkg update && pkg install python curl dnsutils whois traceroute iproute2
+pip install requests
 ```
-./reports/
-  <action>_<YYYYMMDD_HHMMSS>.json
-  <action>_<YYYYMMDD_HHMMSS>.txt   (full diagnostic)
-  scan_history.json
+
+**Linux**
+```bash
+sudo apt install python3 python3-requests curl dnsutils whois traceroute iproute2
 ```
+
+## Usage
+
+```bash
+python3 paradox_recon.py              # interactive
+python3 paradox_recon.py --full       # full diagnostic
+python3 paradox_recon.py --public-ip
+python3 paradox_recon.py --device
+python3 paradox_recon.py --dns example.com
+python3 paradox_recon.py --tls example.com
+python3 paradox_recon.py --headers https://example.com
+```
+
+## Authorized use only
+
+Port scans, subdomain enum, and path checks must only target systems **you own** or have **written permission** to test.
 
 ## License
 
-MIT — Use responsibly. For educational and authorized security testing only.
+MIT
