@@ -1,7 +1,7 @@
 # Paradox Recon
 
 <p align="center">
-  <img src="assets/logo.jpg" alt="Paradox Recon" width="320"/>
+  <img src="assets/logo.svg" alt="Paradox Recon" width="280"/>
 </p>
 
 **NETWORK • WEB • SYSTEM • SECURITY**
