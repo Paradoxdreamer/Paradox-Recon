@@ -4,155 +4,148 @@
   <img src="assets/IMG_7776.jpeg" alt="Paradox Recon" width="320"/>
 </p>
 
-**NETWORK • WEB • SYSTEM • SECURITY** — v1.2.0
-
-A modular reconnaissance & diagnostic toolkit for **Termux** and **Linux**.
+**Discovery → Diagnostics → Correlation → Risk → Report**
 
 ```
 ╔════════════════════════════════════════╗
 ║          ◆  PARADOX RECON  ◆           ║
-║    NETWORK • WEB • SYSTEM • SECURITY   ║
+║         v1.3.0  ·  pipeline engine     ║
 ╚════════════════════════════════════════╝
-     ░ eyes open · signals clear · recon online ░
 ```
 
-## Features
+Not another “run 30 tools” script.  
+A structured **scan pipeline** with plugins, correlation, and professional reports.
 
-### Network
-- Local IP / interfaces, public IP + GeoIP
-- LAN host discovery (ARP + ping)
-- DNS lookup / reverse DNS (A, AAAA, MX, NS, TXT, CNAME, SOA)
-- ASN / organization / WHOIS
-- Route tracing, gateway detection, Wi-Fi info
-
-### Web Diagnostics
-- HTTP/HTTPS status, headers, redirect chains
-- TLS certificate (expiry, SANs, issuer, cipher)
-- Response-time measurement
-- robots.txt / sitemap detection
-- Technology fingerprinting (WordPress, React, nginx, Cloudflare, …)
-
-### Security
-- Security header audit (CSP, HSTS, XFO, XCTO, Referrer-Policy, …)
-- Port scan + **banner grabbing**
-- Common path / sensitive file checks (authorized only)
-- Subdomain enumeration (authorized only)
-- **Email auth**: SPF / DMARC / DKIM selectors
-- **CORS** misconfiguration check
-- **Cookie** flags (HttpOnly, Secure, SameSite)
-- **WAF / CDN** detection
-- Cloud metadata endpoint probe (IMDSv1 exposure)
-
-### Tools
-- Encoder/decoder (Base64, URL, Hex, MD5, SHA1/256/512)
-- Hash type identifier
-- Full auto diagnostic + JSON/TXT reports
-
-### System (Termux / Linux)
-- CPU, RAM, disk, battery, Android/Termux version
-- Kernel, processes, interfaces
-
-## Menu
+## Pipeline
 
 ```
- NETWORK
- ├─ 01  Network Overview
- ├─ 02  Discover Local Devices
- ├─ 03  DNS Intelligence
- ├─ 04  WHOIS / ASN Lookup
- └─ 05  Route Analysis
-
- WEB
- ├─ 06  Website Diagnostics
- ├─ 07  HTTP Header Inspector
- ├─ 08  TLS Certificate Check
- ├─ 09  Security Header Audit
- └─ 10  Redirect Analyzer
-
- SECURITY
- ├─ 11  Port + Banner Grab
- ├─ 12  Domain Surface Check
- ├─ 13  Local Network Audit
- ├─ 14  Email Auth (SPF/DMARC)
- ├─ 15  CORS / Cookie Audit
- └─ 16  WAF / Tech Fingerprint
-
- SYSTEM
- ├─ 17  Device Information
- ├─ 18  Network Interfaces
- └─ 19  Resource Monitor
-
- TOOLS
- ├─ 20  Full Diagnostic
- ├─ 21  Encoder / Decoder
- ├─ 22  Hash Identifier
- ├─ 23  Cloud Metadata Check
- ├─ 24  Generate Report
- └─ 25  Scan History
-
- 26  Exit
+Target  →  Discovery  →  Diagnostics  →  Correlation  →  Risk findings  →  Report
 ```
+
+| Stage | What happens |
+|-------|----------------|
+| **Discovery** | Map the surface (DNS, network, system context) |
+| **Diagnostics** | Probe (web, TLS, security headers, email auth) |
+| **Correlation** | Cross-link evidence into higher-order risks |
+| **Report** | JSON + TXT + HTML from one schema |
 
 ## Install
 
 ### Termux
 
 ```bash
-# 1. Update & install packages
 pkg update -y
-pkg install -y python git curl dnsutils whois traceroute nmap iproute2
-
-# 2. Python dependency
+pkg install -y python git curl dnsutils whois traceroute iproute2
 pip install requests
-
-# 3. Clone & run
 git clone https://github.com/Paradoxdreamer/Paradox-Recon.git
 cd Paradox-Recon
-python paradox_recon.py
-```
-
-Optional (Wi-Fi / battery APIs):
-
-```bash
-pkg install -y termux-api
+pip install -e .
+paradox-recon scan example.com
 ```
 
 ### Linux (Debian / Ubuntu / Kali)
 
 ```bash
-# 1. Update & install packages
 sudo apt update
 sudo apt install -y python3 python3-pip python3-requests git curl dnsutils whois traceroute iproute2 iputils-ping
-
-# 2. Clone & run
 git clone https://github.com/Paradoxdreamer/Paradox-Recon.git
 cd Paradox-Recon
-python3 paradox_recon.py
+pip3 install -e .
+paradox-recon scan example.com
 ```
 
-### One-liner (any system with git + python3)
+Or without install:
 
 ```bash
-git clone https://github.com/Paradoxdreamer/Paradox-Recon.git && cd Paradox-Recon && python3 paradox_recon.py
+cd Paradox-Recon
+PYTHONPATH=. python3 -m paradox_recon scan example.com
 ```
 
-> **Note:** `requests` is strongly recommended. Without it, the tool falls back to `curl` for HTTP checks.
-
-## Usage
+## CLI
 
 ```bash
-python3 paradox_recon.py              # interactive menu
-python3 paradox_recon.py --full       # full diagnostic
-python3 paradox_recon.py --public-ip
-python3 paradox_recon.py --device
-python3 paradox_recon.py --dns example.com
-python3 paradox_recon.py --tls example.com
-python3 paradox_recon.py --headers https://example.com
+# Full pipeline
+paradox-recon scan example.com
+paradox-recon scan example.com https://api.example.com
+
+# Select plugins
+paradox-recon scan example.com -p dns,web,tls
+paradox-recon scan example.com --skip security
+
+# Output control
+paradox-recon scan example.com -o ./out -f json,html
+paradox-recon scan example.com --json-stdout
+
+# Config
+paradox-recon init-config          # writes paradox.yaml
+paradox-recon scan example.com -c paradox.yaml
+
+# Introspection
+paradox-recon plugins
+paradox-recon --version
 ```
+
+### Environment
+
+```bash
+export PARADOX_TIMEOUT=15
+export PARADOX_PLUGINS=dns,web,tls,email
+export PARADOX_FORMATS=json,html
+export PARADOX_OUTPUT_DIR=./reports
+```
+
+## Plugins
+
+| Name | Phase | Description |
+|------|-------|-------------|
+| `system` | discovery | Scanner host context |
+| `network` | discovery | Public IP + common-port probe |
+| `dns` | discovery | A/AAAA/MX/NS/TXT/CNAME/SOA |
+| `web` | diagnostics | HTTP, headers, tech fingerprint, redirects |
+| `tls` | diagnostics | Certificate validity & expiry |
+| `security` | diagnostics | Paths, CORS, cookies *(authorized only)* |
+| `email` | diagnostics | SPF / DMARC / DKIM |
+
+Add your own: drop a `Plugin` subclass in `paradox_recon/plugins/` — it auto-registers.
+
+## Architecture
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+```
+paradox_recon/
+  cli.py            # subcommands
+  engine.py         # pipeline orchestrator
+  schema.py         # Finding, Target, ScanReport
+  correlation.py    # risk from combined evidence
+  config.py         # file + env + CLI
+  plugins/          # one capability per module
+  reports/          # JSON · TXT · HTML
+```
+
+## Reports
+
+Every scan writes under `./reports/` (configurable):
+
+- `scan_<id>.json` — full structured report
+- `scan_<id>.txt` — human-readable
+- `scan_<id>.html` — dark-themed risk report
+
+Exit codes follow risk grade: `A/B → 0`, `C → 1`, `D → 2`, `F → 3`.
+
+## Development
+
+```bash
+pip install -e ".[dev]"
+pytest -q
+python -m compileall paradox_recon
+```
+
+CI runs on push via GitHub Actions (lint + pytest on Python 3.10–3.12).
 
 ## Authorized use only
 
-Port scans, subdomain enum, and path checks must only target systems **you own** or have **written permission** to test.
+Security plugins must only run against systems **you own** or have **written permission** to test.
 
 ## License
 
