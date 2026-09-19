@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="45%" r="50%">
+      <stop offset="0%" stop-color="#fff8c0"/>
+      <stop offset="25%" stop-color="#ffd54a"/>
+      <stop offset="55%" stop-color="#f5a623"/>
+      <stop offset="100%" stop-color="#8b4513"/>
+    </radialGradient>
+    <radialGradient id="core" cx="50%" cy="50%" r="30%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#ffe566"/>
+      <stop offset="100%" stop-color="#ff9800"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="400" fill="#1a1208"/>
+  <!-- outer rays -->
+  <g stroke="#f5c842" stroke-width="3" fill="none" opacity="0.85">
+    <path d="M200 40 L220 120 L280 80 L240 150 L320 160 L250 190 L310 250 L230 230 L240 310 L200 250 L160 310 L170 230 L90 250 L150 190 L80 160 L160 150 L120 80 L180 120 Z"/>
+  </g>
+  <!-- geometric rings -->
+  <circle cx="200" cy="180" r="95" fill="none" stroke="#ffd54a" stroke-width="4" opacity="0.9"/>
+  <circle cx="200" cy="180" r="70" fill="none" stroke="#ffe082" stroke-width="3" opacity="0.8"/>
+  <circle cx="200" cy="180" r="45" fill="none" stroke="#fff59d" stroke-width="2"/>
+  <!-- core -->
+  <circle cx="200" cy="180" r="22" fill="url(#core)"/>
+  <circle cx="200" cy="180" r="10" fill="#fff"/>
+  <!-- diamond accents -->
+  <g fill="#ffd54a" opacity="0.9">
+    <path d="M200 70 L208 90 L200 110 L192 90 Z"/>
+    <path d="M200 250 L208 270 L200 290 L192 270 Z"/>
+    <path d="M110 180 L130 188 L150 180 L130 172 Z"/>
+    <path d="M250 180 L270 188 L290 180 L270 172 Z"/>
+  </g>
+  <!-- title bar hint -->
+  <text x="200" y="360" text-anchor="middle" font-family="monospace" font-size="18" fill="#ffd54a" letter-spacing="3">PARADOX RECON</text>
+</svg>
