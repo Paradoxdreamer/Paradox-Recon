@@ -95,21 +95,53 @@ A modular reconnaissance & diagnostic toolkit for **Termux** and **Linux**.
 
 ## Install
 
-**Termux**
+### Termux
+
 ```bash
-pkg update && pkg install python curl dnsutils whois traceroute iproute2
+# 1. Update & install packages
+pkg update -y
+pkg install -y python git curl dnsutils whois traceroute nmap iproute2
+
+# 2. Python dependency
 pip install requests
+
+# 3. Clone & run
+git clone https://github.com/Paradoxdreamer/Paradox-Recon.git
+cd Paradox-Recon
+python paradox_recon.py
 ```
 
-**Linux**
+Optional (Wi-Fi / battery APIs):
+
 ```bash
-sudo apt install python3 python3-requests curl dnsutils whois traceroute iproute2
+pkg install -y termux-api
 ```
+
+### Linux (Debian / Ubuntu / Kali)
+
+```bash
+# 1. Update & install packages
+sudo apt update
+sudo apt install -y python3 python3-pip python3-requests git curl dnsutils whois traceroute iproute2 iputils-ping
+
+# 2. Clone & run
+git clone https://github.com/Paradoxdreamer/Paradox-Recon.git
+cd Paradox-Recon
+python3 paradox_recon.py
+```
+
+### One-liner (any system with git + python3)
+
+```bash
+git clone https://github.com/Paradoxdreamer/Paradox-Recon.git && cd Paradox-Recon && python3 paradox_recon.py
+```
+
+> **Note:** `requests` is strongly recommended. Without it, the tool falls back to `curl` for HTTP checks.
 
 ## Usage
 
 ```bash
-python3 paradox_recon.py              # interactive
+python3 paradox_recon.py              # interactive menu
 python3 paradox_recon.py --full       # full diagnostic
 python3 paradox_recon.py --public-ip
 python3 paradox_recon.py --device
